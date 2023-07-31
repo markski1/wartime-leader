@@ -19,8 +19,8 @@ class Savegame {
         return true;
     }
 
-    function NewSave($leader, $village) {
-        $this->savegame = array('leader' => $leader, 'village' => $village);
+    function NewSave($leader, $fortress) {
+        $this->savegame = array('leader' => $leader, 'fortress' => $fortress);
 
         $this->UpdateSave();
     }
@@ -48,17 +48,23 @@ class Savegame {
 
     function GetDefaults($field_name) {
         // inputs
-        $default['village'] = "default";
+        $default['fortress'] = "default";
         $default['leader'] = "default";
 
         // resources
         $default['gold'] = 50;
         $default['food'] = 25;
-        $default['villagers'] = 10;
-        $default['army'] = 0;
+        $default['farms'] = 3;
+        
+        // population
+        $default['pop_idle'] = 10;
+        $default['pop_defenders'] = 0;
+        $default['pop_farmers'] = 0;
 
         // state
         $default['day'] = 1;
+        $default['morale'] = 60;
+        $default['enemy_aggro'] = 0;
 
         return $default[$field_name];
     }
