@@ -1,0 +1,96 @@
+/* Colors */
+:root {
+    --primary: #30c0b4;
+    --accent: #479cd1;
+    --text: #dadadd;
+}
+
+/* Globals */
+body {
+    background-color: #080203;
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
+    Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    margin: 0;
+}
+
+a {
+    color: var(--primary);
+}
+
+a:hover {
+    color: var(--accent);
+}
+
+h4 {
+    margin: 0rem 0rem .75rem;
+}
+
+/* Body */
+
+.container {
+    width: 100%;
+    max-width: 980px;
+    margin: auto;
+}
+
+.block {
+    background-color: #151515;
+    padding: 1rem;
+    width: 20rem;
+    max-width: 100%;
+    margin-bottom: 1rem;
+    margin: 1rem;
+}
+
+.innerBlock {
+    background-color: #252525;
+    width: 20rem;
+    padding: 0.2rem 1rem 0.4rem;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+}
+
+/* Forms */
+
+.formInput {
+    border-width: 0px;
+    width: 15rem;
+    height: 1.25rem;
+    border-radius: 0px;
+    margin-bottom: 0.5rem;
+    height: 1.2rem;
+    padding: 0.33rem;
+}
+
+.formButton {
+    background-color: #202020;
+    color: white;
+    border: 1px solid #000000;
+    font-size: 1.15rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem 1.25rem;
+}
+
+.submitButton {
+    background-color: #101010;
+    color: white;
+    margin-top: 1rem;
+    padding: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 0px;
+    border: 1px solid #000000;
+    font-size: 1.2rem;
+}
+
+*:focus {
+    outline: none;
+    outline-width: 0px;
+}
+
+/* Text */
+
+.item {
+    margin: 5px 0px;
+}
