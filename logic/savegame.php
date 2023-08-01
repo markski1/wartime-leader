@@ -42,7 +42,7 @@ class Savegame {
      * @return mixed
      */
     function Get($field) {
-        if (!array_key_exists($field, $this->savegame) || $this->savegame[$field] == NULL) {
+        if (!array_key_exists($field, $this->savegame)) {
             $this->savegame[$field] = $this->GetDefaults($field);
         }
 

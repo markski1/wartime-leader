@@ -55,7 +55,7 @@
     $refugee_arrivals = round($refugee_arrivals);
 
     $week_modifier = $week;
-    if ($week_modifier > 40) $week_modifier = 40;
+    if ($week_modifier > 30) $week_modifier = 30;
 
     if ($week > 1) {
         $new_demons = rand(0, $week_modifier) * rand(0, 100) * 0.1;
@@ -84,20 +84,16 @@
     $aggresivity = $save->Get('aggresivity');
 
     if ($week > 2)
-        @$aggresivity += rand($week_modifier / 3, $week_modifier) * ($new_demons / 3);
+        $aggresivity += rand(0 , $week_modifier) * round($new_demons / 10);
 
     $aggresivity = round($aggresivity);
 
-    $attack = rand(0, $aggresivity);
+    $attack_roll = rand(0, $aggresivity);
 
-    $demons_will_attack = false;
-
-    if ($attack > 70) {
+    if ($attack_roll > 70) {
         $demons_will_attack = true;
     }
-    else if ($attack > 40) {
-        $demons_will_attack = true;
-    }
+    else $demons_will_attack = false;
 
     $houses = $save->Get('houses');
 
@@ -190,7 +186,7 @@
 
     if ($demons_will_attack) {
         $report[] = "-----------------------";
-        $report[] = "<h1 style='color:red'><em>DEMONS HAVE ATTACKED</em></h1>";
+        $report[] = "<h1 style='color:red; font-size: 1.75rem; margin-bottom: .5rem;'><em>DEMONS HAVE ATTACKED</em></h1>";
 
         @$attack_force = rand($demons / 3, round($demons * 0.95));
 
@@ -221,19 +217,22 @@
             - Damage to research
         */
 
-        $deaths = round( ($population * 0.01) * ($attack_force * 0.015) );
+        $deaths = round( ($population * 0.01) * ($attack_force * (0.025 * $week_modifier)) );
         $population -= $deaths;
 
         $report[] = "{$deaths} people were killed.";
 
         if ($aggresivity > 100) {
-            $aggresivity -= 100;
+            $aggresivity -= 50;
         }
         $aggresivity = round ($aggresivity / 2);
+        $aggresivity -= $deaths;
+
+        if ($aggresivity < 0) $aggresivity = 0;
 
 
         if ($population < 20) {
-            include "../view/game_over.php";
+            include "../view/game-over.php";
             exit;
         }
 
@@ -256,7 +255,7 @@
 
     $debug = "Demon aggresivity: {$aggresivity} <br />";
     $debug .= "Max population: {$max_pop} <br />";
-    $debug .= "Attack roll: {$attack} <br />";
+    $debug .= "Attack roll: {$attack_roll} <br />";
     $debug .= "Workforce per task: {$workforce} <br />";
     
     include '../view/main.php';

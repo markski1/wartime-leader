@@ -89,16 +89,16 @@
                 <div id="action-area">
                     <p class="item">The scout reports <?=$save->Get('demons')?> demons nearby.</p>
                     <p class="item">The scholars report <?=number_format($save->Get('progress'), 2)?>% progress.</p>
-                    <input type="submit" class="formButton" value="Proceed into the next week" />
-                    <?php
-                        if (isset($error)) echo "<p style='color: red;'>{$error}</p>";
-                    ?>
                     <h4 style="margin: 1rem">Previous week report:</h4>
                     <div id="events" class="innerBlock" style="text-align: center;">
                         <p>
                             <?=$save->GetWeekReport()?>
                         </p>
                     </div>
+                    <input type="submit" class="formButton" value="Proceed into the next week" />
+                    <?php
+                        if (isset($error)) echo "<p style='color: red;'>{$error}</p>";
+                    ?>
                 </div>
             </div>
         </section>
@@ -106,6 +106,7 @@
             <small>
                 <?php
                     if (isset($debug)) {
+                        echo '<p>previous week debug</p>';
                         echo $debug;
                     }
                 ?>
