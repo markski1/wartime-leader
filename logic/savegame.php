@@ -80,8 +80,12 @@ class Savegame {
 
             $report = "";
 
+            $limit = 100;
+
             foreach($data as $line) {
                 $report = $report . $line . "<br />";
+                $limit--;
+                if ($limit < 1) break;
             }
 
             return $report;
@@ -114,7 +118,7 @@ class Savegame {
 
         // buildings
         $default['houses'] = 10;
-        $default['farms'] = 3;
+        $default['farms'] = 5;
         $default['barracks'] = 1;
         $default['walls'] = 50;
         

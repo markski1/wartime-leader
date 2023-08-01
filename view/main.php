@@ -52,22 +52,18 @@
                 <h4>Population</h4>
                 <p class="item">Total: <?=$save->Get('total_pop')?></p>
                 <p>Distribution for the next week:</p>
-                <ul>
-                    <li class="item">Workers: <input class="popInput" type="number" min="20" max="60" name="workers" value="<?=$save->Get('workers')?>"> percent</li>
-                    <li class="item">Defenders: <input class="popInput" type="number" min="20" max="60" name="defenders" value="<?=$save->Get('defenders')?>"> percent</li>
-                    <li class="item">Scholars: <input class="popInput" type="number" min="20" max="60" name="scholars" value="<?=$save->Get('scholars')?>"> percent</li>
-                </ul>
+                <div hx-post="view/component/population_mgmt.php" hx-trigger="load" hx-target="this"></div>
             </div>
             <div class="block">
                 <h4>State</h4>
                 <p class="item">Buildings:</p>
                 <ul>
-                    <li class="item"><b>Farms:</b> <?=$save->Get('farms')?></li>
-                    <li class="item"><b>Houses:</b> <?=$save->Get('houses')?></li>
+                    <li class="item"><b>Farms:</b> <?=$save->Get('farms')?> (will feed <?=$save->Get('farms') * 20?> people)</li>
+                    <li class="item"><b>Houses:</b> <?=$save->Get('houses')?> (will fit <?=$save->Get('houses') * 10?> people)</li>
                 </ul>
                 <p class="item">Stats:</p>
                 <ul>
-                    <li class="item"><b>Barracks level:</b> <?=$save->Get('barracks')?></li>
+                    <li class="item"><b>Barracks level:</b> <?=$save->Get('barracks')?> / 5</li>
                     <li class="item"><b>Wall condition:</b> <?=$save->Get('walls')?>%</li>
                 </ul>
             </div>
@@ -75,10 +71,10 @@
                 <h4>Actions</h4>
                 <p class="item">Split the workforce in:</p>
                 <ul>
-                    <li class="item"><label><input type="checkbox" class="actionBox" name="farms"> Build more farms</label></li>
-                    <li class="item"><label><input type="checkbox" class="actionBox" name="houses"> Build more houses</label></li>
-                    <li class="item"><label><input type="checkbox" class="actionBox" name="barracks"> Improve the barracks</label></li>
-                    <li class="item"><label><input type="checkbox" class="actionBox" name="walls"> Improve the walls</label></li>
+                    <li class="item"><label><input type="checkbox" class="actionBox" <?php if (isset($_POST['farms'])) echo 'checked';?> name="farms"> Build more farms</label></li>
+                    <li class="item"><label><input type="checkbox" class="actionBox" <?php if (isset($_POST['houses'])) echo 'checked';?> name="houses"> Build more houses</label></li>
+                    <li class="item"><label><input type="checkbox" class="actionBox" <?php if (isset($_POST['barracks'])) echo 'checked';?> name="barracks"> Improve the barracks</label></li>
+                    <li class="item"><label><input type="checkbox" class="actionBox" <?php if (isset($_POST['walls'])) echo 'checked';?> name="walls"> Improve the walls</label></li>
                 </ul>
             </div>
         </section>
@@ -86,8 +82,35 @@
 
         <section style="margin-top: 1.5rem; display: flex; flex-wrap: wrap; justify-content: center;">
             <div class="block" style="max-width: 30rem">
+                <input type="submit" class="formButton" style="width: 100%" value="Proceed into the next week" />
+                <?php
+                    if (isset($error)) echo "<p style='color: red;'>{$error}</p>";
+                ?>
                 <div id="action-area">
-                    <p class="item">The scout reports <?=$save->Get('demons')?> demons nearby.</p>
+                    <p class="item">The scouts reports <?=$save->Get('demons')?> demons nearby.</p>
+                    <p class="item">
+                        <small>
+                            They look: 
+                            <?php
+                                $aggro = $save->Get('aggresivity');
+                                if ($aggro > 80) {
+                                    echo "<span style='color: #FF0000'>ready to kill</span>.";
+                                }
+                                else if ($aggro > 60) {
+                                    echo "<span style='color: #FF2222'>vicious</span>.";
+                                }
+                                else if ($aggro > 40) {
+                                    echo "<span style='color: #FFAAAA'>aggresive</span>.";
+                                }
+                                else if ($aggro > 20) {
+                                    echo "<span style='color: white'>active</span>.";
+                                }
+                                else {
+                                    echo "<span style='color: #22CC22'>passive</span>.";
+                                }
+                            ?>
+                        </small>
+                    </p>
                     <p class="item">The scholars report <?=number_format($save->Get('progress'), 2)?>% progress.</p>
                     <h4 style="margin: 1rem">Previous week report:</h4>
                     <div id="events" class="innerBlock" style="text-align: center;">
@@ -95,10 +118,6 @@
                             <?=$save->GetWeekReport()?>
                         </p>
                     </div>
-                    <input type="submit" class="formButton" value="Proceed into the next week" />
-                    <?php
-                        if (isset($error)) echo "<p style='color: red;'>{$error}</p>";
-                    ?>
                 </div>
             </div>
         </section>

@@ -2,28 +2,18 @@
     include_once '../logic/savegame.php';
     $save = new Savegame;
 
-    // move inputs to variables
-    $workers = $_POST['workers'];
-    $defenders = $_POST['defenders'];
-    $scholars = $_POST['scholars'];
-
-    // ensure validity
-    if (!is_numeric($workers) || !is_numeric($defenders) || !is_numeric($scholars)) {
-        $error = "Invalid input.";
-        include '../view/main.php';
-        exit;
-    }
-
-    // update save state
-    $save->Set('workers', $workers);
-    $save->Set('defenders', $defenders);
-    $save->Set('scholars', $scholars);
-
-    if ($workers + $defenders + $scholars != 100) {
-        $error = "The population distribution does not add up to 100%.";
-        include '../view/main.php';
-        exit;
-    }
+    $workers = $save->Get('workers');
+    $defenders = $save->Get('defenders');
+    $scholars = $save->Get('scholars');
+    $progress = $save->Get('progress');
+    $population = $save->Get('total_pop');
+    $week = $save->Get('week');
+    $demons = $save->Get('demons');
+    $aggresivity = $save->Get('aggresivity');
+    $houses = $save->Get('houses');
+    $farms = $save->Get('farms');
+    $barracks = $save->Get('barracks');
+    $walls = $save->Get('walls');
 
     $report = array();
 
@@ -36,8 +26,6 @@
     // a php bool is really just either 0 or 1, so this works.
     $task_count = $build_farms + $build_houses + $improve_barracks + $improve_walls;
 
-    $population = $save->Get('total_pop');
-
     if ($task_count > 0) {
         $workforce = (($workers * 0.01) * $population) / $task_count;
         $workforce = round($workforce);
@@ -49,53 +37,51 @@
     }
 
     // weekly events
-    $week = $save->Get('week');
-
     $refugee_arrivals = $week * 2 - rand(0, $week);
     $refugee_arrivals = round($refugee_arrivals);
 
     $week_modifier = $week;
-    if ($week_modifier > 30) $week_modifier = 30;
+    if ($week_modifier > 25) $week_modifier = 25;
 
     if ($week > 1) {
         $new_demons = rand(0, $week_modifier) * rand(0, 100) * 0.1;
         // no luck after week 10
         if ($week >= 10 && $new_demons == 0) {
-            $new_demons = rand(2, 10);
+            $new_demons = rand(2, 20);
         }
-        if ($new_demons > 20) $new_demons *= 0.9;
-        if ($new_demons > 40) $new_demons *= 0.8;
-        if ($new_demons > 60) $new_demons = 50 + rand(0, 25);
+        if ($progress < 60) {
+            if ($new_demons > 25) $new_demons *= 0.75;
+            if ($new_demons > 50) $new_demons *= 0.5;
+        }
+        else if ($progress < 90) {
+            if ($new_demons > 25) $new_demons *= 0.9;
+            if ($new_demons > 50) $new_demons *= 0.75;
+        }
         $new_demons = round($new_demons);
     }
     else   
         $new_demons = 0;
 
-    $demons = $save->Get('demons');
+    
     $demons += $new_demons;
 
     if ($new_demons == 0) {
-        $report[] = "Scouts report no new demons nearby.";
+        $report[] = "Scouts report <span style='color: green'>no</span> new demons nearby.";
     }
     else {
-        $report[] = "Scouts report {$new_demons} more demons nearby.";
+        $report[] = "Scouts report <span style='color: red'>{$new_demons}</span> more demons nearby.";
     }
 
-    $aggresivity = $save->Get('aggresivity');
-
-    if ($week > 2)
-        $aggresivity += rand(0 , $week_modifier) * round($new_demons / 10);
-
-    $aggresivity = round($aggresivity);
+    if ($week > 2) {
+        $aggresivity += round( $new_demons / 2 );
+    }
 
     $attack_roll = rand(0, $aggresivity);
 
-    if ($attack_roll > 70) {
+    if ($attack_roll > 40 || $aggresivity > 100) {
         $demons_will_attack = true;
     }
     else $demons_will_attack = false;
-
-    $houses = $save->Get('houses');
 
     // house building
     if ($build_houses) {
@@ -110,17 +96,15 @@
         if ($new_houses == 0)
             $report[] = "No houses were built.";
         else if ($new_houses == 1)
-            $report[] = "A new house was built.";
+            $report[] = "1 new house was built.";
         else
             $report[] = "{$new_houses} houses were built.";
     }
-
-    $farms = $save->Get('farms');
     
     // farm building
     if ($build_farms) {
 
-        $new_farms = ($workforce / 20);
+        $new_farms = round($workforce / 20);
         if ($new_farms < 1) {
             $new_farms = rand(0, 1);
         }
@@ -137,10 +121,8 @@
     }
 
     // barrack improvement
-    $barracks = $save->Get('barracks');
     if ($improve_barracks) {
         // workforce % is irrelevant.
-        $barracks = $save->Get('barracks');
         $barracks++;
         if ($barracks > 5) {
             $barracks = 5;
@@ -152,22 +134,27 @@
     }
 
     // wall improvements
-    $walls = $save->Get('walls');
     if ($improve_walls) {
-        $wall_improvement = $walls * ($workforce * 0.0023);
+        $wall_improvement = $walls * ($workforce * 0.03);
         $walls += round($wall_improvement);
         if ($walls > 100) $walls = 100;
         $report[] = "Walls were repaired to {$walls}% condition.";
     }
 
     // scholar research
-    $scholar_count = $population * ($scholars * 0.003);
-    $progress = $save->Get('progress');
+    $scholar_count = (($scholars * 0.01) * $population);
 
-    $new_progress = $scholar_count * 0.1;
+    $new_progress = $scholar_count * 0.025;
+    if ($new_progress > 1.75) {
+        $new_progress = 1.75 + (($new_progress - 1.75) * 0.5);
+    }
     $progress += $new_progress;
     $report[] = "Scholars have made ".number_format($new_progress, 2)."% progress.";
 
+    if ($progress >= 100) {
+        include "../view/victory.php";
+        exit;
+    }
 
     $max_pop = $houses * 10;
 
@@ -177,63 +164,96 @@
         $rejected_refugees = $population - $max_pop;
         $population = $max_pop;
 
-        $report[] = "{$refugee_arrivals} refugees from neighboring fortresses arrived. {$rejected_refugees} were turned away due to lack of housing.";
+        $report[] = "<span style='color: var(--primary)'>{$refugee_arrivals}</span> refugees from neighboring fortresses arrived.<br />{$rejected_refugees} were turned away due to lack of housing.";
     }
     else {
         if ($refugee_arrivals == 0) $report = "We received no refugees this week.";
-        $report[] = "We received {$refugee_arrivals} refugees from neighboring fortresses.";
+        $report[] = "We received <span style='color: var(--primary)'>{$refugee_arrivals}</span> refugees from neighboring fortresses.";
+    }
+
+    // if not enough farms, famine.
+    if ($farms * 20 < $population) {
+        $starved = $population - ($farms * 20);
+        $starved = rand(1, $starved);
+        $report[] = "<span style='color: red;'>Famine!</span> Not enough farms. {$starved} have died of hunger.";
+        $population -= $starved;
     }
 
     if ($demons_will_attack) {
         $report[] = "-----------------------";
         $report[] = "<h1 style='color:red; font-size: 1.75rem; margin-bottom: .5rem;'><em>DEMONS HAVE ATTACKED</em></h1>";
 
-        @$attack_force = rand($demons / 3, round($demons * 0.95));
+        $attack_force = round( rand(round($demons / 3), round($demons * 0.95)));
 
         $demons -= $attack_force;
 
         $report[] = "{$attack_force} demons attacked the fortress.";
 
-        if ($walls > 70) {
+        if ($walls >= 50) {
             $report[] = "The walls sustained heavy damage, but helped hold back the attack.";
-            $walls -= rand (10, round($walls / 2));
-            $attack_force = round( $attack_force * 0.7 );
+            $walls -= rand (20, round($walls / 2));
+            $attack_force = round( $attack_force * 0.75 );
         }
-        else if ($walls > 25) {
+        else if ($walls >= 20) {
             $report[] = "The walls sustained damage, but helped hold back the attack some.";
-            $walls -= rand (7, round($walls / 3));
-            $attack_force = round( $attack_force * 0.83 );
+            $walls -= rand (10, round($walls / 2));
+            $attack_force = round( $attack_force * 0.88 );
         }
         else {
             $report[] = "The walls had no chance helping hold back the attack.";
             $walls = 0;
         }
-
         if ($walls < 0) $walls = 0;
 
-        /*
-        TODO:
-            - Damage to property
-            - Damage to research
-        */
 
-        $deaths = round( ($population * 0.01) * ($attack_force * (0.025 * $week_modifier)) );
-        $population -= $deaths;
+        $defender_count = (($defenders * 0.01) * $population);
+        $defense_force = round($defender_count * ($barracks * 0.05));
 
-        $report[] = "{$deaths} people were killed.";
-
-        if ($aggresivity > 100) {
-            $aggresivity -= 50;
+        if ($barracks > 1) {
+            $barracks--;
+            if ($barracks > 1 && $attack_force > 100) $barracks--;
+            $report[] = "The barracks sustained damage.";
         }
-        $aggresivity = round ($aggresivity / 2);
-        $aggresivity -= $deaths;
 
-        if ($aggresivity < 0) $aggresivity = 0;
+        $effective_attack_force = round($attack_force - ($defense_force * 0.9));
 
+        $property_destruction_force = $effective_attack_force;
+        $houses_gone = 0;
+        $farms_gone = 0;
+        while ($property_destruction_force > 10) {
+            if (rand(0, 1)) {
+                $houses_gone++;
+            }
+            else {
+                $farms_gone++;
+            }
+            $property_destruction_force -= 20;
+        }
 
-        if ($population < 20) {
+        if ($houses_gone > 0) $report[] = "{$houses_gone} houses were destroyed.";
+        if ($farms_gone > 0) $report[] = "{$farms_gone} farms were destroyed.";
+
+        $deaths = round( ($population * 0.01) * ($effective_attack_force * (0.025 * $week_modifier)) );
+
+        if ($population - $deaths < 20) {
             include "../view/game-over.php";
             exit;
+        }
+
+        if ($deaths > 0) {
+            $population -= $deaths;
+
+            $report[] = "{$deaths} people were killed.";
+
+            $aggresivity -= $deaths;
+            if ($aggresivity < 0) $aggresivity = 0;
+        }
+        else {
+            $report[] = "No one was killed.";
+        }
+
+        if ($aggresivity > 40) {
+            $aggresivity = round($aggresivity / 2);
         }
 
         $report[] = "-----------------------";
@@ -253,10 +273,16 @@
 
     $save->SetWeekReport($report);
 
-    $debug = "Demon aggresivity: {$aggresivity} <br />";
-    $debug .= "Max population: {$max_pop} <br />";
-    $debug .= "Attack roll: {$attack_roll} <br />";
-    $debug .= "Workforce per task: {$workforce} <br />";
+        $debug = "Demon aggresivity: {$aggresivity} <br />";
+        $debug .= "Max population: {$max_pop} <br />";
+        $debug .= "Attack roll: {$attack_roll} <br />";
+        $debug .= "Workforce per task: {$workforce} <br />";
+        if (isset($attack_force)) {
+            $debug .= "Attack force: {$attack_force} <br />";
+        }
+        if (isset($defense_force)) {
+            $debug .= "Defense force: {$defense_force} <br />";
+        }
     
     include '../view/main.php';
 ?>
