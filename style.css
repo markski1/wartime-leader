@@ -51,6 +51,7 @@ h4 {
     width: 100%;
     padding: 1rem;
     margin: .5rem;
+    user-select: none;
 }
 
 .innerBlock {
@@ -59,6 +60,7 @@ h4 {
     margin-bottom: 1rem;
     font-size: 0.85rem;
     margin: auto;
+    user-select: text;
 }
 
 /* Forms */

@@ -76,7 +76,7 @@
                 <p class="item">Split the workforce in:</p>
                 <ul>
                     <li class="item"><label><input type="checkbox" class="actionBox" name="farms"> Build more farms</label></li>
-                    <li class="item"><label><input type="checkbox" class="actionBox" name="farms"> Build more houses</label></li>
+                    <li class="item"><label><input type="checkbox" class="actionBox" name="houses"> Build more houses</label></li>
                     <li class="item"><label><input type="checkbox" class="actionBox" name="barracks"> Improve the barracks</label></li>
                     <li class="item"><label><input type="checkbox" class="actionBox" name="walls"> Improve the walls</label></li>
                 </ul>
