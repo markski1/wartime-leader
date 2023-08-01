@@ -1,5 +1,5 @@
 <?php
-    if (!isset($_POST['leader_name']) || !isset($_POST['fortress_name'])) {
+    if (!isset($_POST['leader_name']) || !isset($_POST['fortress_name']) || strlen($_POST['leader_name']) < 1 || strlen($_POST['fortress_name']) < 1) {
         include('../view/new-game.php');
         echo '<p>You must complete both fields.</p>';
         return;

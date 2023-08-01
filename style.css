@@ -7,7 +7,7 @@
 
 /* Globals */
 body {
-    background-color: #080203;
+    background-color: #0A1525;
     color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
     Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
@@ -49,16 +49,16 @@ h4 {
 /* Body */
 
 .container {
-    width: 97%;
+    width: 98%;
     max-width: 980px;
     margin: auto;
 }
 
 .block {
-    background-color: #151515;
+    background-color: #00000055;
+    max-width: 20rem;
+    width: 100%;
     padding: 1rem;
-    width: 17rem;
-    max-width: 100%;
     margin: .5rem;
 }
 
@@ -71,6 +71,13 @@ h4 {
 }
 
 /* Forms */
+
+.popInput {
+    width: 2.5rem;
+    border-width: 0;
+    margin: .25rem .3rem;
+    padding: .25rem;
+}
 
 .formInput {
     border-width: 0px;
