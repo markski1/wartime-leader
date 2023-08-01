@@ -53,9 +53,9 @@
                 <p class="item">Total: <?=$save->Get('total_pop')?></p>
                 <p>Distribution for the next week:</p>
                 <ul>
-                    <li class="item">Workers: <input class="popInput" type="number" min="30" max="80" name="workers" value="<?=$save->Get('workers')?>"> percent</li>
-                    <li class="item">Defenders: <input class="popInput" type="number" min="10" max="60" name="defenders" value="<?=$save->Get('defenders')?>"> percent</li>
-                    <li class="item">Scholars: <input class="popInput" type="number" min="10" max="60" name="scholars" value="<?=$save->Get('scholars')?>"> percent</li>
+                    <li class="item">Workers: <input class="popInput" type="number" min="20" max="60" name="workers" value="<?=$save->Get('workers')?>"> percent</li>
+                    <li class="item">Defenders: <input class="popInput" type="number" min="20" max="60" name="defenders" value="<?=$save->Get('defenders')?>"> percent</li>
+                    <li class="item">Scholars: <input class="popInput" type="number" min="20" max="60" name="scholars" value="<?=$save->Get('scholars')?>"> percent</li>
                 </ul>
             </div>
             <div class="block">
@@ -68,7 +68,7 @@
                 <p class="item">Stats:</p>
                 <ul>
                     <li class="item"><b>Barracks level:</b> <?=$save->Get('barracks')?></li>
-                    <li class="item"><b>Wall condition:</b> <?=$save->Get('walls')?></li>
+                    <li class="item"><b>Wall condition:</b> <?=$save->Get('walls')?>%</li>
                 </ul>
             </div>
             <div class="block">
@@ -88,12 +88,12 @@
             <div class="block" style="max-width: 30rem">
                 <div id="action-area">
                     <p class="item">The scout reports <?=$save->Get('demons')?> demons nearby.</p>
-                    <p class="item">The scholars report <?=$save->Get('progress')?>% progress.</p>
+                    <p class="item">The scholars report <?=number_format($save->Get('progress'), 2)?>% progress.</p>
                     <input type="submit" class="formButton" value="Proceed into the next week" />
                     <?php
                         if (isset($error)) echo "<p style='color: red;'>{$error}</p>";
                     ?>
-                    <h4 style="margin: 1rem">Week report:</h4>
+                    <h4 style="margin: 1rem">Previous week report:</h4>
                     <div id="events" class="innerBlock" style="text-align: center;">
                         <p>
                             <?=$save->GetWeekReport()?>
@@ -104,6 +104,11 @@
         </section>
         <p style="text-align: center">
             <small>
+                <?php
+                    if (isset($debug)) {
+                        echo $debug;
+                    }
+                ?>
                 <a href="/" hx-target="#main" hx-confirm="Are you sure?" hx-post="action/delete-game.php">delete save</a>
             </small>
         </p>
