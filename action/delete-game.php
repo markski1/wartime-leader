@@ -2,6 +2,7 @@
     if (isset($_COOKIE['savegame'])) {
         unset($_COOKIE['savegame']);
         setcookie('savegame', '', -1, '/');
+        setcookie('week_report', '', -1, '/');
     }
 ?>
 

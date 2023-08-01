@@ -19,9 +19,10 @@ class Savegame {
         return true;
     }
 
-    function NewSave($leader, $fortress) {
+    function NewGame($leader, $fortress) {
         $this->savegame = array('leader' => $leader, 'fortress' => $fortress);
 
+        $this->SetWeekReport("You are on your first week.");
         $this->UpdateSave();
     }
 
@@ -42,7 +43,21 @@ class Savegame {
         $this->UpdateSave();
     }
 
+    function SetWeekReport($data) {
+        setcookie('week_report', $data, time() + (10 * 365 * 24 * 60 * 60), "/");
+        $_COOKIE['week_report'] = $data;
+    }
+
+    function GetWeekReport() {
+        if (isset($_COOKIE['week_report'])) {
+            return $_COOKIE['week_report'];
+        }
+
+        return "No report.";
+    }
+
     function UpdateSave() {
+        $_COOKIE['savegame'] = json_encode($this->savegame);
         setcookie('savegame', json_encode($this->savegame), time() + (10 * 365 * 24 * 60 * 60), "/");
     }
 
@@ -55,8 +70,10 @@ class Savegame {
         $default['food'] = 25;
 
         // buildings
+        $default['houses'] = 20;
         $default['farms'] = 3;
-        $default['level_barrack'] = 1;
+        $default['barracks'] = 1;
+        $default['walls'] = 50;
         
         // population
         $default['total_pop'] = 100;

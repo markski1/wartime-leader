@@ -7,7 +7,8 @@
 
     // if no save exists, show the preface.
     if (!$save->SaveExists()) {?>
-        <div>
+        <main style="max-width: 980px; max-width: 97%; margin: auto;">
+            <h1>Wartime leader</h1>
             <p>Wartime leader is a simple game, inspired on <em>Enchanted Fortress</em>, a text-based Android game by Ivan Kravarscan.</p>
             <h2>Preface</h2>
             <p>
@@ -32,7 +33,7 @@
                 All progress is automatically saved on your web browser.
             </p>
             <p><a href="/" hx-post="view/new-game.php" hx-target="#main">Start new game</a></p>
-        </div>
+        </main>
     <?php
         exit;
     }
@@ -45,56 +46,66 @@
         <h3>Fortress of <?=$save->Get('fortress')?></h3>
         <p class="item">Leader <?=$save->Get('leader')?>, Week <?=$save->Get('week')?></h3>
     </section>
-    <section style="margin-top: 1.5rem; display: flex; flex-wrap: wrap; justify-content: center;">
-        <div class="block">
-            <h4>Population</h4>
-            <p class="item">Total: <?=$save->Get('total_pop')?></p>
-            <p>Distribution for the next week:</p>
-            <ul>
-                <li class="item">Workers: <input class="popInput" type="number" min="10" max="100" value="<?=$save->Get('workers')?>"> percent</li>
-                <li class="item">Defenders: <input class="popInput" type="number" min="10" max="100" value="<?=$save->Get('defenders')?>"> percent</li>
-                <li class="item">Scholars: <input class="popInput" type="number" min="10" max="100" value="<?=$save->Get('scholars')?>"> percent</li>
-            </ul>
-        </div>
-        <div class="block">
-            <h4>State</h4>
-            <p class="item">Buildings:</p>
-            <ul>
-                <li class="item">Farms: <?=$save->Get('farms')?></li>
-                <li class="item">Barracks: Level <?=$save->Get('level_barrack')?></li>
-            </ul>
-            <p class="item">Resources:</p>
-            <ul>
-                <li class="item">Food: <?=$save->Get('food')?></li>
-            </ul>
-            <p>Focus for the next week:</p>
-            <div style="text-align: center">
-                <select name="priority" class="formInput" style="height: 2rem; margin-left: 1rem;">
-                    <option value="1">Build more farms</option>
-                    <option value="2">Improve barracks</option>
-                </select>
+    <form hx-post="action/next-week.php" hx-target="#main">
+        <section style="margin-top: 1.5rem; display: flex; flex-wrap: wrap; justify-content: center;">
+            <div class="block">
+                <h4>Population</h4>
+                <p class="item">Total: <?=$save->Get('total_pop')?></p>
+                <p>Distribution for the next week:</p>
+                <ul>
+                    <li class="item">Workers: <input class="popInput" type="number" min="30" max="80" name="workers" value="<?=$save->Get('workers')?>"> percent</li>
+                    <li class="item">Defenders: <input class="popInput" type="number" min="10" max="60" name="defenders" value="<?=$save->Get('defenders')?>"> percent</li>
+                    <li class="item">Scholars: <input class="popInput" type="number" min="10" max="60" name="scholars" value="<?=$save->Get('scholars')?>"> percent</li>
+                </ul>
             </div>
-        </div>
-    </section>
+            <div class="block">
+                <h4>State</h4>
+                <p class="item">Buildings:</p>
+                <ul>
+                    <li class="item"><b>Farms:</b> <?=$save->Get('farms')?></li>
+                    <li class="item"><b>Houses:</b> <?=$save->Get('houses')?></li>
+                </ul>
+                <p class="item">Stats:</p>
+                <ul>
+                    <li class="item"><b>Barracks level:</b> <?=$save->Get('barracks')?></li>
+                    <li class="item"><b>Wall condition:</b> <?=$save->Get('walls')?></li>
+                </ul>
+            </div>
+            <div class="block">
+                <h4>Actions</h4>
+                <p class="item">Split the workforce in:</p>
+                <ul>
+                    <li class="item"><label><input type="checkbox" class="actionBox" name="farms"> Build more farms</label></li>
+                    <li class="item"><label><input type="checkbox" class="actionBox" name="farms"> Build more houses</label></li>
+                    <li class="item"><label><input type="checkbox" class="actionBox" name="barracks"> Improve the barracks</label></li>
+                    <li class="item"><label><input type="checkbox" class="actionBox" name="walls"> Improve the walls</label></li>
+                </ul>
+            </div>
+        </section>
 
 
-    <section style="justify-content: center; margin-top: 1.5rem">
-        <div class="block" style="margin: auto; max-width: 30rem; width: 100%">
-            <div id="action-area">
-                <p class="item">The scout reports <?=$save->Get('demons')?> demons nearby.</p>
-                <p class="item">The scholars report <?=$save->Get('progress')?>% progress.</p>
-                <button class="formButton">Proceed into the next week.</button><br />
-                <div id="events" style="text-align: center;">
-                    <p>
-                        You are on your first week.
-                    </p>
+        <section style="margin-top: 1.5rem; display: flex; flex-wrap: wrap; justify-content: center;">
+            <div class="block" style="max-width: 30rem">
+                <div id="action-area">
+                    <p class="item">The scout reports <?=$save->Get('demons')?> demons nearby.</p>
+                    <p class="item">The scholars report <?=$save->Get('progress')?>% progress.</p>
+                    <input type="submit" class="formButton" value="Proceed into the next week" />
+                    <?php
+                        if (isset($error)) echo "<p style='color: red;'>{$error}</p>";
+                    ?>
+                    <h4 style="margin: 1rem">Week report:</h4>
+                    <div id="events" class="innerBlock" style="text-align: center;">
+                        <p>
+                            <?=$save->GetWeekReport()?>
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
         <p style="text-align: center">
             <small>
                 <a href="/" hx-target="#main" hx-confirm="Are you sure?" hx-post="action/delete-game.php">delete save</a>
             </small>
         </p>
-    </section>
+    </form>
 </main>

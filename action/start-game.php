@@ -15,7 +15,7 @@
 
     $save = new Savegame;
 
-    $save->NewSave($_POST['leader_name'], $_POST['fortress_name']);
+    $save->NewGame($_POST['leader_name'], $_POST['fortress_name']);
 
     include("../view/main.php");
 ?>

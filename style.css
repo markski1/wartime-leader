@@ -7,32 +7,17 @@
 
 /* Globals */
 body {
-    background-color: #0A1525;
+    background-color: #090919;
     color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
     Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
     margin: 0;
 }
 
-@media only screen and (min-width : 0px) {
-    footer {
-        margin-top: 50px;
-        text-align: center;
-    }
+footer {
+    margin-top: 50px;
+    text-align: center;
 }
-
-@media only screen and (min-width : 1000px) {
-    footer {
-        position: absolute;
-        bottom: 12px;
-        right: 0px;
-        left: 0px;
-        margin: auto;
-        text-align: center;
-    }
-}
-
-
 
 a {
     color: var(--primary);
@@ -54,8 +39,14 @@ h4 {
     margin: auto;
 }
 
+.main {
+    width: 98%;
+    max-width: 1200px;
+    margin: auto;
+}
+
 .block {
-    background-color: #00000055;
+    background: #101010;
     max-width: 20rem;
     width: 100%;
     padding: 1rem;
@@ -64,19 +55,25 @@ h4 {
 
 .innerBlock {
     background-color: #252525;
-    width: 20rem;
     padding: 0.2rem 1rem 0.4rem;
     margin-bottom: 1rem;
     font-size: 0.85rem;
+    margin: auto;
 }
 
 /* Forms */
 
 .popInput {
-    width: 2.5rem;
+    width: 3rem;
+    height: 1.25rem;
     border-width: 0;
     margin: .25rem .3rem;
     padding: .25rem;
+}
+
+.actionBox {
+    width: 1.2rem;
+    height: 1.2rem;
 }
 
 .formInput {
