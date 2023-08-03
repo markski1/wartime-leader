@@ -1,5 +1,5 @@
 <?php
-
+include "fragments.php";
 function DrawGame($save, $error = false) {
 ?>
     <main>
@@ -13,7 +13,9 @@ function DrawGame($save, $error = false) {
                     <h4>Population</h4>
                     <p class="item">Total: <?=$save->Get('total_pop')?></p>
                     <p>Distribution for the next week:</p>
-                    <div hx-post="view/component/population_mgmt.php" hx-trigger="load" hx-target="this"></div>
+                    <div hx-target="this">
+                        <?php DrawPopulationManager($save->Get('workers'), $save->Get('defenders'), $save->Get('scholars')); ?>
+                    </div>
                 </div>
                 <div class="block">
                     <h4>State</h4>

@@ -28,11 +28,14 @@
             <p>Your success will depend on your ability to adapt to the given time.</p>
             <h2>Gameplay</h2>
             <p>
-                You must do your actions for each week, then proceed to the next week.<br />
-                Depending on the state of your fortress and the progress of the invasion, events will partake during the night.<br />
+                You must manage the fortress' actions and priorities for each week, then advance to the next week.<br />
+                Depending on the state of your fortress and the progress of the invasion, events will partake during the week.<br />
                 All progress is automatically saved on your web browser.
             </p>
-            <p><a href="/" hx-post="view/new-game.php" hx-target="#main">Start new game</a></p>
+            <p>Ideally, you should try to reach the victory condition in the least weeks possible.</p>
+            <p style="font-size: 1.25rem"><a href="/" hx-post="view/new-game.php" hx-target="#main">Start new game</a></p>
+            <p style="font-size: 1.1rem"><a href="/" hx-post="view/hall.php" hx-target="#main">Hall of fame</a></p>
+            <p><a href="https://github.com/markski1/wartime-leader">Source code</a></p>
         </main>
     <?php
         exit;

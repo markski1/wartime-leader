@@ -105,7 +105,8 @@
     if ($build_houses) {
         $new_houses = ($workforce / 20);
         if ($new_houses < 1) {
-            $new_houses = rand(0, 1);
+            if ($new_houses > 0.95) $new_houses = 1;
+            else $new_houses = rand(0, 1);
         }
         
         $new_houses = round($new_houses);
@@ -122,9 +123,10 @@
     // farm building
     if ($build_farms) {
 
-        $new_farms = round($workforce / 20);
+        $new_farms = round($workforce / 25);
         if ($new_farms < 1) {
-            $new_farms = rand(0, 1);
+            if ($new_farms > 0.85) $new_farms = 1;
+            else $new_farms = rand(0, 1);
         }
 
         $farms += $new_farms;
@@ -212,12 +214,12 @@
 
         if ($walls >= 50) {
             $report[] = "The walls sustained heavy damage, but helped hold back the attack.";
-            $walls -= rand(20, round($walls / 2));
+            $walls -= rand(20, round($walls * 0.4));
             $attack_force = round($attack_force * 0.75);
         }
         else if ($walls >= 20) {
             $report[] = "The walls sustained damage, but helped hold back the attack some.";
-            $walls -= rand(10, round($walls / 2));
+            $walls -= rand(10, round($walls * 0.3));
             $attack_force = round($attack_force * 0.88);
         }
         else {
@@ -228,7 +230,7 @@
 
 
         $defender_count = (($defenders * 0.01) * $population);
-        $defense_force = round($defender_count * ($barracks * 0.05));
+        $defense_force = round($defender_count * ($barracks * 0.06));
 
         if ($barracks > 1) {
             $barracks--;
