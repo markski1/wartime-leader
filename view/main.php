@@ -96,17 +96,14 @@
                                 if ($aggro > 80) {
                                     echo "<span style='color: #FF0000'>ready to kill</span>.";
                                 }
-                                else if ($aggro > 60) {
+                                else if ($aggro > 50) {
                                     echo "<span style='color: #FF2222'>vicious</span>.";
                                 }
-                                else if ($aggro > 40) {
+                                else if ($aggro > 30) {
                                     echo "<span style='color: #FFAAAA'>aggresive</span>.";
                                 }
-                                else if ($aggro > 20) {
-                                    echo "<span style='color: white'>active</span>.";
-                                }
                                 else {
-                                    echo "<span style='color: #22CC22'>passive</span>.";
+                                    echo "<span style='color: #22AA22'>passive</span>.";
                                 }
                             ?>
                         </small>

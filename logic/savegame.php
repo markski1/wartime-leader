@@ -135,6 +135,12 @@ class Savegame {
         $default['demons'] = 0;
         $default['aggresivity'] = 0;
 
+        // record
+        $default['attacks'] = 0;
+        $default['killed'] = 0;
+        $default['deaths'] = 0;
+        $default['property_loss'] = 0;
+
         return $default[$field];
     }
 }
