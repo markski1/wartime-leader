@@ -21,7 +21,7 @@
                 $fortress = htmlspecialchars($row['fortress']);
                 $leader = htmlspecialchars($row['leader']);
                 echo "{$row['weeks']} weeks: Fortress of '{$fortress}', lead by '{$leader}' <br />";
-                echo "<small>killed {$row['killed']}, lost {$row['deaths']} people, lost {$row['property_loss']} buildings, endured {$row['attacks']} attacks.</small>";
+                echo "<small>killed {$row['killed']} demons, lost {$row['deaths']} people, lost {$row['property_loss']} buildings, endured {$row['attacks']} attacks.</small>";
                 echo '</p>';
             }
         }

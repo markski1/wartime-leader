@@ -44,8 +44,6 @@
         exit;
     }
 
-    $attacks++;
-
     $week_modifier = $week;
     if ($week_modifier > 23) $week_modifier = 23;
 
@@ -205,6 +203,8 @@
         $report[] = "-----------------------";
         $report[] = "<h1 style='color:red; font-size: 1.75rem; margin-bottom: .5rem;'><em>DEMONS HAVE ATTACKED</em></h1>";
 
+        $attacks++;
+
         $attack_force = rand(round($demons / 3), round($demons * 0.95));
 
         $demons -= $attack_force;
@@ -261,7 +261,7 @@
 
         // no point continuing to play with less than 20 population, so just kill them all.
         if ($population - $deaths < 20) {
-            $killed -= $attack_force - 2;
+            $killed -= round($attack_force / 2);
             $save->Set('attacks', $attacks);
             $save->Set('killed', $killed);
             $save->Set('deaths', $total_deaths);
