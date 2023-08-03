@@ -65,6 +65,7 @@
     $save->Set('workers', $workers);
     $save->Set('defenders', $defenders);
     $save->Set('scholars', $scholars);
+    $save->UpdateSave();
 ?>
 
 <ul>

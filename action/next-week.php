@@ -1,5 +1,6 @@
 <?php
     include_once '../logic/savegame.php';
+    include_once "../view/game-view.php";
     $save = new Savegame;
 
     $workers = $save->Get('workers');
@@ -39,15 +40,14 @@
         }
     }
     else {
-        $error = "You must assign your workers at least one task.";
-        include '../view/main.php';
+        DrawGame($save, "You must assign your workers at least one task.");
         exit;
     }
 
     $attacks++;
 
     $week_modifier = $week;
-    if ($week_modifier > 22) $week_modifier = 22;
+    if ($week_modifier > 23) $week_modifier = 23;
 
     // weekly events
     $refugee_arrivals = round($week_modifier * 2 - rand(0, $week_modifier));
@@ -264,6 +264,7 @@
             $save->Set('killed', $killed);
             $save->Set('deaths', $total_deaths);
             $save->Set('property_loss', $property_loss);
+            $save->UpdateSave();
             include "../view/game-over.php";
             exit;
         }
@@ -291,6 +292,7 @@
 
     $attacks++;
 
+    
     // update all new values to the savegame.
     $save->Set('total_pop', $population);
     $save->Set('aggresivity', $aggresivity);
@@ -305,18 +307,11 @@
     $save->Set('killed', $killed);
     $save->Set('deaths', $total_deaths);
     $save->Set('property_loss', $property_loss);
-
-    $save->SetWeekReport($report);
-
-        $debug = "Demon aggresivity: {$aggresivity} <br />";
-        $debug .= "Max population: {$max_pop} <br />";
-        $debug .= "Workforce per task: {$workforce} <br />";
-        if (isset($attack_force)) {
-            $debug .= "Attack force: {$attack_force} <br />";
-        }
-        if (isset($defense_force)) {
-            $debug .= "Defense force: {$defense_force} <br />";
-        }
     
-    include '../view/main.php';
+    $save->SetWeekReport($report);
+    
+    $save->UpdateSave();
+
+    
+    DrawGame($save);
 ?>

@@ -33,6 +33,7 @@ class Savegame {
         $this->savegame = array('leader' => $leader, 'fortress' => $fortress);
 
         $this->SetWeekReport([ "You are on your first week." ]);
+
         $this->UpdateSave();
     }
 
@@ -46,8 +47,8 @@ class Savegame {
             $this->savegame[$field] = $this->GetDefaults($field);
         }
 
-        if (is_array($this->UpdateSave()))
-            return htmlspecialchars($this->UpdateSave());
+        if (is_string($this->savegame[$field]))
+            return htmlspecialchars($this->savegame[$field]);
         
         return $this->savegame[$field];
     }
@@ -60,8 +61,6 @@ class Savegame {
      */
     function Set($field, $value) {
         $this->savegame[$field] = $value;
-
-        $this->UpdateSave();
     }
 
     function SetWeekReport($data) {
