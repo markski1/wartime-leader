@@ -291,10 +291,7 @@
         $report[] = "-----------------------";
         $report[] = "All attacking demons were killed.";
     }
-
-    $attacks++;
-
-    
+  
     // update all new values to the savegame.
     $save->Set('total_pop', $population);
     $save->Set('aggresivity', $aggresivity);
